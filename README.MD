@@ -41,7 +41,7 @@ Keluar
 Select an option by entering the corresponding number.
 
 ## Author
-Your Name  
-[GitHub](https://github.com/USERNAME) | [LinkedIn](https://linkedin.com/in/USERNAME)
+MOCH. IKHSAN ABDILLAH
+[GitHub](https://github.com/sanne63) | [LinkedIn](https://www.linkedin.com/in/moch-ikhsan-abdillah-840b362a3/)
 
 
