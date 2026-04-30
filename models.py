@@ -42,3 +42,12 @@ def get_summary():
     ).fetchone()[0]
     conn.close()
     return income, expense
+
+def get_transactions_by_month(year, month):
+    conn = get_connection()
+    rows = conn.execute(
+        "SELECT * FROM transactions WHERE strftime('%Y', date) = ? AND strftime('%m', date) = ? ORDER BY date DESC",
+        (str(year), str(month).zfill(2))
+    ).fetchall()
+    conn.close()
+    return rows

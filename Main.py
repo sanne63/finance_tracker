@@ -1,5 +1,5 @@
 from database import init_db
-from models import add_transaction, get_all_transactions, update_transaction, delete_transaction, get_summary
+from models import add_transaction, get_all_transactions, update_transaction, delete_transaction, get_summary, get_transactions_by_month
 from datetime import date
 
 def print_transactions(rows):
@@ -23,6 +23,7 @@ def main():
         print("3. Update transaksi")
         print("4. Hapus transaksi")
         print("5. Ringkasan saldo")
+        print("6. Lihat transaksi per bulan")
         print("0. Keluar")
         print("=" * 40)
         choice = input("Pilih menu: ").strip()
@@ -70,6 +71,19 @@ def main():
             print(f"\n  Total pemasukan  : Rp {income:,.0f}")
             print(f"  Total pengeluaran: Rp {expense:,.0f}")
             print(f"  Saldo            : Rp {balance:,.0f}\n")
+
+        elif choice == "6":
+            try:
+                year = int(input("Masukkan tahun (contoh: 2025): ").strip())
+                month = int(input("Masukkan bulan (1-12): ").strip())
+                if month < 1 or month > 12:
+                    print("Bulan harus antara 1-12.")
+                else:
+                     rows = get_transactions_by_month(year, month)
+                     print(f"\nTransaksi bulan {month}/{year}:")
+                     print_transactions(rows)
+            except ValueError:
+                print("Input tidak valid, masukkan angka.")
 
         elif choice == "0":
             print("Sampai jumpa!")
