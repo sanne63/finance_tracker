@@ -7,6 +7,7 @@ A command-line application to track personal income and expenses, built with Pyt
 - Update existing transactions
 - Delete transactions
 - View balance summary (total income, expenses, and balance)
+- Filter transactions by month
 
 ## Tech Stack
 - **Language:** Python 3
