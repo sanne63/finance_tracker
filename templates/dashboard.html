@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor Keuangan - FinanceTracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body id="dashboard-page">
+    <div class="dashboard-container">
+        <!-- HEADER -->
+        <header class="dashboard-header">
+            <div class="logo-wrapper">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                    </svg>
+                </div>
+                <span>FinanceTracker</span>
+            </div>
+            
+            <div class="user-profile-wrapper">
+                <div class="user-details">
+                    <span class="user-name" id="profile-name">{{ user.name }}</span>
+                    <span class="user-email" id="profile-email">{{ user.email }}</span>
+                </div>
+                <div class="user-avatar" id="profile-avatar">
+                    {{ user.name[0] | upper }}
+                </div>
+                <button class="btn-logout" id="btn-logout" title="Keluar dari Akun">
+                    <!-- Logout Icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD CONTENT -->
+        <main class="dashboard-content">
+            <!-- Jumbotron Selamat Datang -->
+            <div class="welcome-banner">
+                <h1 class="welcome-title">Selamat datang, {{ user.name }}!</h1>
+                <p class="welcome-desc">Kelola keuangan pribadimu dengan mudah dan pantau arus kas Anda.</p>
+            </div>
+
+            <!-- METRIC CARDS -->
+            <div class="metrics-grid">
+                <!-- Total Saldo (Gradient) -->
+                <div class="metric-card saldo-card">
+                    <div class="metric-info">
+                        <div class="metric-label">Total Saldo</div>
+                        <div class="metric-value" id="total-saldo-value">Rp 0</div>
+                        <div class="metric-subtext" id="total-saldo-count">0 transaksi tercatat</div>
+                    </div>
+                    <div class="metric-icon-circle">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Pemasukan -->
+                <div class="metric-card income-card">
+                    <div class="metric-info">
+                        <div class="metric-label" id="monthly-income-label">Pemasukan • Juni 2026</div>
+                        <div class="metric-value" id="monthly-income-value">Rp 0</div>
+                        <div class="metric-subtext">bulan ini</div>
+                    </div>
+                    <div class="metric-icon-circle">
+                        <!-- Up Arrow Icon -->
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path d="M5 17.59L15.59 7H9V5h10v10h-2V8.41L6.41 19 5 17.59z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Pengeluaran -->
+                <div class="metric-card expense-card">
+                    <div class="metric-info">
+                        <div class="metric-label" id="monthly-expense-label">Pengeluaran • Juni 2026</div>
+                        <div class="metric-value" id="monthly-expense-value">Rp 0</div>
+                        <div class="metric-subtext">bulan ini</div>
+                    </div>
+                    <div class="metric-icon-circle">
+                        <!-- Down Arrow Icon -->
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path d="M19 6.41L17.59 5 7 15.59V9H5v10h10v-2H8.41L19 6.41z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANELS GRID -->
+            <div class="panels-grid">
+                <!-- Left Panel: Daftar Transaksi -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div class="panel-title-wrapper">
+                            <h2 class="panel-title">Transaksi</h2>
+                            <p class="panel-subtitle">Kelola pemasukan dan pengeluaranmu</p>
+                        </div>
+                        <button class="btn-add" id="btn-add-tx">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                            </svg>
+                            Tambah
+                        </button>
+                    </div>
+
+                    <!-- Controls Bar (Filter + Search + Month) -->
+                    <div class="controls-bar">
+                        <div class="search-input-wrapper">
+                            <!-- Search Icon -->
+                            <svg viewBox="0 0 24 24">
+                                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                            </svg>
+                            <input type="text" class="search-input" id="search-input" placeholder="Cari kategori atau catatan...">
+                        </div>
+                        
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-type="all">Semua</button>
+                            <button class="filter-tab" data-type="income">Pemasukan</button>
+                            <button class="filter-tab" data-type="expense">Pengeluaran</button>
+                        </div>
+
+                        <div class="month-picker-wrapper">
+                            <select class="month-select" id="month-select">
+                                <!-- Dynamic month lists -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Transactions List Container -->
+                    <div class="transactions-list" id="transactions-container">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+
+                <!-- Right Panel: Distribusi Pengeluaran -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <div class="panel-title-wrapper">
+                            <h2 class="panel-title">Pengeluaran</h2>
+                            <p class="panel-subtitle" id="breakdown-label">Per kategori • Juni 2026</p>
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown Container -->
+                    <div class="category-breakdown-wrapper" id="category-breakdown">
+                        <!-- Dynamic categories progress bar list -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL POPUP FOR ADD/EDIT TRANSACTION -->
+    <div class="modal-overlay" id="transaction-modal">
+        <div class="modal-content">
+            <div class="modal-title-bar">
+                <h3 class="modal-title" id="modal-title">Tambah Transaksi</h3>
+                <button class="btn-close-modal" id="btn-close-modal">
+                    <!-- Close Icon -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="transaction-form" class="modal-form">
+                <input type="hidden" id="modal-tx-id">
+                
+                <!-- Tipe Transaksi -->
+                <div class="type-radio-group">
+                    <div>
+                        <input type="radio" name="type" value="income" id="radio-income" class="type-radio-input">
+                        <label for="radio-income" class="type-radio-label">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path d="M5 17.59L15.59 7H9V5h10v10h-2V8.41L6.41 19 5 17.59z"/>
+                            </svg>
+                            Pemasukan
+                        </label>
+                    </div>
+                    <div>
+                        <input type="radio" name="type" value="expense" id="radio-expense" class="type-radio-input" checked>
+                        <label for="radio-expense" class="type-radio-label">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path d="M19 6.41L17.59 5 7 15.59V9H5v10h10v-2H8.41L19 6.41z"/>
+                            </svg>
+                            Pengeluaran
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Kategori -->
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="modal-category">Kategori</label>
+                    <input type="text" id="modal-category" class="form-input" style="padding-left: 1rem;" placeholder="Makan, Gaji, Transport, dll." required>
+                </div>
+
+                <!-- Jumlah -->
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="modal-amount">Jumlah (Rp)</label>
+                    <input type="number" id="modal-amount" class="form-input" style="padding-left: 1rem;" placeholder="0" min="1" step="any" required>
+                </div>
+
+                <!-- Tanggal -->
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="modal-date">Tanggal</label>
+                    <input type="date" id="modal-date" class="form-input" style="padding-left: 1rem;" required>
+                </div>
+
+                <!-- Catatan -->
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="modal-note">Catatan (opsional)</label>
+                    <input type="text" id="modal-note" class="form-input" style="padding-left: 1rem;" placeholder="Catatan tambahan">
+                </div>
+
+                <!-- Footer Buttons -->
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="btn-cancel-modal">Batal</button>
+                    <button type="submit" class="btn-save">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
